@@ -1,0 +1,70 @@
+package com.knowledgekin;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.swing.*;
+import java.lang.reflect.Method;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculatorTest {
+
+    private Calculator calculator;
+    private JTextField display;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        calculator = new Calculator();
+
+        // Access the private 'display' field using reflection
+        Method getDisplayMethod = Calculator.class.getDeclaredMethod("getDisplayForTest");
+        getDisplayMethod.setAccessible(true);
+        display = (JTextField) getDisplayMethod.invoke(calculator);
+    }
+
+    @Test
+    public void testCalculateMean() throws Exception {
+        display.setText("10,20,30");
+        Method method = Calculator.class.getDeclaredMethod("calculateMean");
+        method.setAccessible(true);
+        method.invoke(calculator);
+        assertEquals("20.0", display.getText());
+    }
+
+    @Test
+    public void testCalculateMedian() throws Exception {
+        display.setText("10,30,20");
+        Method method = Calculator.class.getDeclaredMethod("calculateMedian");
+        method.setAccessible(true);
+        method.invoke(calculator);
+        assertEquals("20.0", display.getText());
+    }
+
+    @Test
+    public void testCalculateCube() throws Exception {
+        display.setText("3");
+        Method method = Calculator.class.getDeclaredMethod("calculateCube");
+        method.setAccessible(true);
+        method.invoke(calculator);
+        assertEquals("27.0", display.getText());
+    }
+
+    @Test
+    public void testCalculatePower() throws Exception {
+        display.setText("2,3");
+        Method method = Calculator.class.getDeclaredMethod("calculatePower");
+        method.setAccessible(true);
+        method.invoke(calculator);
+        assertEquals("8.0", display.getText());
+    }
+
+    @Test
+    public void testEvaluateExpression() throws Exception {
+        display.setText("2+3*4");
+        Method method = Calculator.class.getDeclaredMethod("evaluateExpression");
+        method.setAccessible(true);
+        method.invoke(calculator);
+        assertEquals("14", display.getText());
+    }
+}
